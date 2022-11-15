@@ -10,12 +10,25 @@
 #include <cctype>
 using namespace std;
 
+const int MIN_CHAR_INT = 'a', MAX_CHAR_INT = 'z';
+
 list<string> fiveLetters;
+
+bool onlyAtoZ(string* s)
+{
+    
+    for (auto it = s->begin(); it != s->end(); it++)
+    {
+        int char_int = *it;
+        if (char_int < MIN_CHAR_INT || char_int > MAX_CHAR_INT) return false;
+    }
+    return true;
+}
 
 void add(string myText)
 { 
     // add to list and output only 5 letter words
-    if (myText.length() == 5)
+    if (myText.length() == 5 && onlyAtoZ(&myText))
     {
         fiveLetters.push_back(myText);
         cout << myText << endl;
