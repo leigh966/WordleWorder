@@ -56,23 +56,31 @@ void toLower(string* s)
         [](unsigned char c) { return std::tolower(c); });
 }
 
-int main()
+void outputRuntime(time_t start, time_t end)
 {
-    time_t start, end;
-    
-    ifstream MyFile("words.txt");
-    string myText;
-    time(&start);
-    while (getline(MyFile, myText)) {
-        toLower(&myText);
-        add(myText);
-    }
-    time(&end);
     // Calculating total time taken by the program.
     double time_taken = double(end - start);
     cout << "Time taken by program is : " << fixed
         << time_taken << setprecision(5);
     cout << " sec " << endl;
+}
+
+int main()
+{
+    time_t start, end;
+    ifstream MyFile("words.txt");
+    string myText;
+
+    time(&start);
+
+    while (getline(MyFile, myText)) {
+        toLower(&myText);
+        add(myText);
+    }
+
+    time(&end);
+
+    outputRuntime(start, end);
     return 0;
 }
 
