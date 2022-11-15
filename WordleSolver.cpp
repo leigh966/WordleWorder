@@ -14,6 +14,7 @@ using namespace std;
 const int MIN_CHAR_INT = 'a', MAX_CHAR_INT = 'z';
 
 list<string> fiveLetters;
+list<int> bins;
 
 
 int getLetterIndex(char letter)
@@ -75,9 +76,12 @@ void add(string myText)
     // add to list and output only 5 letter words with no punctuation
     if (myText.length() == 5 && onlyAtoZ(&myText) && noRepeatingLetters(&myText))
     {
-        fiveLetters.push_back(myText);
+        
         cout << myText << endl;
-        cout << binaryRep(&myText) << endl;
+        int binRep = binaryRep(&myText);
+        cout << binRep << endl;
+        fiveLetters.push_back(myText);
+        bins.push_back(binRep);
 
     }
 }
