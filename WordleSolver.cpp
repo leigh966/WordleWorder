@@ -27,7 +27,7 @@ bool onlyAtoZ(string* s)
 
 void add(string myText)
 { 
-    // add to list and output only 5 letter words
+    // add to list and output only 5 letter words with no punctuation
     if (myText.length() == 5 && onlyAtoZ(&myText))
     {
         fiveLetters.push_back(myText);
