@@ -17,6 +17,15 @@ list<string> fiveLetters;
 list<int> bins;
 
 
+bool binaryTaken(int bin)
+{
+    for (auto it = bins.begin();it != bins.end();it++)
+    {
+        if (bin == *it) return true;
+    }
+    return false;
+}
+
 int getLetterIndex(char letter)
 {
     
@@ -76,13 +85,14 @@ void add(string myText)
     // add to list and output only 5 letter words with no punctuation
     if (myText.length() == 5 && onlyAtoZ(&myText) && noRepeatingLetters(&myText))
     {
-        
         cout << myText << endl;
         int binRep = binaryRep(&myText);
-        cout << binRep << endl;
-        fiveLetters.push_back(myText);
-        bins.push_back(binRep);
-
+        if (!binaryTaken(binRep))
+        {
+            cout << binRep << endl;
+            fiveLetters.push_back(myText);
+            bins.push_back(binRep);
+        }
     }
 }
 
