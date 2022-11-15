@@ -9,12 +9,17 @@ using namespace std;
 
 int main()
 {
-    cout << "Hello World!\n";
+    list<string> fiveLetters;
     ifstream MyFile("words.txt");
     string myText;
+
     while (getline(MyFile, myText)) {
         // Output the text from the file
-        cout << myText << endl;
+        if (myText.length() == 5)
+        {
+            fiveLetters.push_back(myText);
+            cout << myText << endl;
+        }     
     }
 }
 
