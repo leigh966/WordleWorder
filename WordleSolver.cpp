@@ -6,13 +6,12 @@
 #include <fstream>
 #include <string>
 #include <iomanip>      // std::setprecision
-#include <thread>
-#include <mutex>
+#include <algorithm>
+#include <cctype>
 using namespace std;
 
-mutex myMutex;
-
 list<string> fiveLetters;
+
 void add(string myText)
 { 
     // add to list and output only 5 letter words
@@ -23,6 +22,12 @@ void add(string myText)
     }
 }
 
+void toLower(string* s)
+{
+    transform(s->begin(), s->end(), s->begin(),
+        [](unsigned char c) { return std::tolower(c); });
+}
+
 int main()
 {
     time_t start, end;
@@ -31,6 +36,7 @@ int main()
     string myText;
     time(&start);
     while (getline(MyFile, myText)) {
+        toLower(&myText);
         add(myText);
     }
     time(&end);
