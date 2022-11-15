@@ -25,10 +25,25 @@ bool onlyAtoZ(string* s)
     return true;
 }
 
+bool noRepeatingLetters(string* s)
+{
+    string seenLetters = "";
+    for (auto it = s->begin(); it != s->end(); it++)
+    {
+        char letter = *it;
+        if (seenLetters.find(letter) != string::npos)
+        {
+            return false;
+        }
+        seenLetters += letter;
+    }
+    return true;
+}
+
 void add(string myText)
 { 
     // add to list and output only 5 letter words with no punctuation
-    if (myText.length() == 5 && onlyAtoZ(&myText))
+    if (myText.length() == 5 && onlyAtoZ(&myText) && noRepeatingLetters(&myText))
     {
         fiveLetters.push_back(myText);
         cout << myText << endl;
