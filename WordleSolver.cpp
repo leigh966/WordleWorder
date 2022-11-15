@@ -6,22 +6,32 @@
 #include <fstream>
 #include <string>
 #include <iomanip>      // std::setprecision
+#include <thread>
+#include <mutex>
 using namespace std;
+
+mutex myMutex;
+
+list<string> fiveLetters;
+void add(string myText)
+{ 
+    // add to list and output only 5 letter words
+    if (myText.length() == 5)
+    {
+        fiveLetters.push_back(myText);
+        cout << myText << endl;
+    }
+}
 
 int main()
 {
     time_t start, end;
-    list<string> fiveLetters;
+    
     ifstream MyFile("words.txt");
     string myText;
     time(&start);
     while (getline(MyFile, myText)) {
-        // Output the text from the file
-        if (myText.length() == 5)
-        {
-            fiveLetters.push_back(myText);
-            cout << myText << endl;
-        }     
+        add(myText);
     }
     time(&end);
     // Calculating total time taken by the program.
