@@ -16,12 +16,24 @@ bool areDifferent(uint32_t bin1, uint32_t bin2)
     return (bin1 & bin2) == 0;
 }
 
-void findDifferentWordBinaries(uint32_t wordBin, uint32_t output[4], uint32_t* numFound)
+void copyBinaryArray(uint32_t* src, uint32_t* dest, uint32_t size)
 {
+    for (int index = 0; index < size; index++)
+    {
+        *dest = *src;
+        src++;
+        dest++;
+    }
+}
+
+const int GOAL_NUM_WORDS = 5;
+void findDifferentWordBinaries(uint32_t thisWordBin, uint32_t output[5], uint32_t* numFound)
+{
+    output[*numFound] = thisWordBin;
+    (*numFound)++;
     for (auto it = bins.begin(); it != bins.end(); it++)
     {
-        if (areDifferent(wordBin, *it))
-        {
+
             bool different = true;
             for (int i = 0; i < *numFound; i++)
             {
@@ -29,10 +41,15 @@ void findDifferentWordBinaries(uint32_t wordBin, uint32_t output[4], uint32_t* n
             }
             if (different)
             {
-                output[*numFound] = *it;
-                (*numFound)++;
+                uint32_t newOutput[GOAL_NUM_WORDS];
+                copyBinaryArray(output, newOutput, *numFound);
+                uint32_t newNumFound = *numFound;
+                findDifferentWordBinaries(*it, newOutput, &newNumFound);
+                if (newNumFound > *numFound) *numFound = newNumFound;
+                copyBinaryArray(newOutput, output, newNumFound);
             }
-        }
+            if (*numFound == GOAL_NUM_WORDS) return;
+        
     }
 }
 
@@ -40,11 +57,11 @@ void search()
 {
     for (auto it = bins.begin(); it != bins.end(); it++)
     {
-        uint32_t output[4];
+        uint32_t output[GOAL_NUM_WORDS];
         uint32_t numFound = 0;
         findDifferentWordBinaries(*it, output, &numFound);
         cout << numFound << " found for " << *it << endl;
-        if (numFound > 3) break;
+        if (numFound == GOAL_NUM_WORDS) break;
     }
 
 }
@@ -165,9 +182,11 @@ int main()
         return -1;
     }
     }
-    time(&end);
+    
 
     search();
+
+    time(&end);
 
     outputRuntime(start, end);
     return 0;
