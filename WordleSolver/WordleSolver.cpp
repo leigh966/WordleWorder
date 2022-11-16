@@ -10,9 +10,43 @@ list<string> fiveLetters;
 list<uint32_t> bins;
 
 
+
 bool areDifferent(uint32_t bin1, uint32_t bin2)
 {
     return (bin1 & bin2) == 0;
+}
+
+void findDifferentWordBinaries(uint32_t wordBin, uint32_t output[4], uint32_t* numFound)
+{
+    for (auto it = bins.begin(); it != bins.end(); it++)
+    {
+        if (areDifferent(wordBin, *it))
+        {
+            bool different = true;
+            for (int i = 0; i < *numFound; i++)
+            {
+                different = areDifferent(output[i], *it) && different;
+            }
+            if (different)
+            {
+                output[*numFound] = *it;
+                (*numFound)++;
+            }
+        }
+    }
+}
+
+void search()
+{
+    for (auto it = bins.begin(); it != bins.end(); it++)
+    {
+        uint32_t output[4];
+        uint32_t numFound = 0;
+        findDifferentWordBinaries(*it, output, &numFound);
+        cout << numFound << " found for " << *it << endl;
+        if (numFound > 3) break;
+    }
+
 }
 
 bool binaryTaken(uint32_t bin)
@@ -133,7 +167,7 @@ int main()
     }
     time(&end);
 
-
+    search();
 
     outputRuntime(start, end);
     return 0;
