@@ -18,9 +18,6 @@
     <ClCompile Include="WordleSolver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Stash.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WordleSolver.hpp">

@@ -1,2 +1,5 @@
 .vs/
 WordleSolver/.vs
+WordleSolver/Debug
+WordleSolver/x64
+WordleSolverTester/x64
