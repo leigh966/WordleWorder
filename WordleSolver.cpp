@@ -1,23 +1,18 @@
 // WordleSolver.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
-#include <iostream>
-#include <list>
-#include <fstream>
-#include <string>
-#include <iomanip>      // std::setprecision
-#include <algorithm>
-#include <cctype>
-#include <format>
+#include "WordleSolver.hpp"
 using namespace std;
 
 const int MIN_CHAR_INT = 'a', MAX_CHAR_INT = 'z';
 
 list<string> fiveLetters;
-list<int> bins;
+list<uint32_t> bins;
 
 
-bool binaryTaken(int bin)
+
+
+bool binaryTaken(uint32_t bin)
 {
     for (auto it = bins.begin();it != bins.end();it++)
     {
@@ -26,7 +21,7 @@ bool binaryTaken(int bin)
     return false;
 }
 
-int getLetterIndex(char letter)
+uint32_t getLetterIndex(char letter)
 {
     
     
@@ -86,7 +81,7 @@ void add(string myText)
     if (myText.length() == 5 && onlyAtoZ(&myText) && noRepeatingLetters(&myText))
     {
         cout << myText << endl;
-        int binRep = binaryRep(&myText);
+        uint32_t binRep = binaryRep(&myText);
         if (!binaryTaken(binRep))
         {
             cout << binRep << endl;
@@ -133,7 +128,6 @@ int main()
         return -1;
     }
     }
-
     time(&end);
 
 
