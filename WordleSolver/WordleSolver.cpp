@@ -16,16 +16,6 @@ bool areDifferent(uint32_t bin1, uint32_t bin2)
     return (bin1 & bin2) == 0;
 }
 
-void copyBinaryArray(uint32_t* src, uint32_t* dest, uint32_t size)
-{
-    for (int index = 0; index < size; index++)
-    {
-        *dest = *src;
-        src++;
-        dest++;
-    }
-}
-
 void outputWordsForBinaries(uint32_t* chosenBins, int length)
 {
     for (int i = 0; i < length; ++i)
@@ -50,12 +40,11 @@ void outputWordsForBinaries(uint32_t* chosenBins, int length)
 }
 
 const int GOAL_NUM_WORDS = 5;
-void findDifferentWordBinaries(uint32_t thisWordBin, uint32_t output[5], uint32_t* numFound, int startIndex)
+bool findDifferentWordBinaries(uint32_t thisWordBin, uint32_t output[5], uint32_t* numFound, int startIndex)
 {
-    cout << ".";
     output[*numFound] = thisWordBin;
     (*numFound)++;
-    
+    outputWordsForBinaries(output, *numFound);
     int index = startIndex;
     auto it = bins.begin();
     
@@ -68,21 +57,18 @@ void findDifferentWordBinaries(uint32_t thisWordBin, uint32_t output[5], uint32_
         }
         if (different)
         {
-            uint32_t newOutput[GOAL_NUM_WORDS] = { 0,0,0,0,0 };
-            copyBinaryArray(output, newOutput, *numFound);
-            uint32_t newNumFound = *numFound;
-            findDifferentWordBinaries(*it, newOutput, &newNumFound, index);
+            bool bad = findDifferentWordBinaries(*it, output, numFound, index);
+            if (bad) (*numFound)--;
             if (*numFound == GOAL_NUM_WORDS)
             {
-                *numFound = newNumFound;
-                copyBinaryArray(newOutput, output, newNumFound);
-                return;
+                return false;
             }
-            index++;
+            
         }
+        index++;
         
     }
-
+    return true;
 }
 
 void search()
@@ -111,7 +97,6 @@ bool binaryTaken(uint32_t bin)
 
 uint32_t getLetterIndex(char letter)
 {
-    
     
     // letters ordered by frequency in the oxford dictionary
     //      source: http://letterfrequency.org/
