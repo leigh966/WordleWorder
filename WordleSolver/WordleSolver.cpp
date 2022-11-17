@@ -26,45 +26,75 @@ void copyBinaryArray(uint32_t* src, uint32_t* dest, uint32_t size)
     }
 }
 
+void outputWordsForBinaries(uint32_t* chosenBins, int length)
+{
+    for (int i = 0; i < length; ++i)
+    {
+        uint32_t bin = *(chosenBins + i);
+        string word;
+        int index = 0;
+        for (auto it = bins.begin(); it != bins.end(); it++)
+        {
+            if (*it == bin)
+            {
+                auto newIt = fiveLetters.begin();
+                advance(newIt, index);
+                word = *newIt;
+                break;
+            }
+            ++index;
+        }
+        cout << word << ", ";
+    }
+    cout << endl;
+}
+
 const int GOAL_NUM_WORDS = 5;
 void findDifferentWordBinaries(uint32_t thisWordBin, uint32_t output[5], uint32_t* numFound, int startIndex)
 {
+    cout << ".";
     output[*numFound] = thisWordBin;
     (*numFound)++;
-    int index = 0;
     
-    for (auto it = bins.begin(); it != bins.end(); it++)
+    int index = startIndex;
+    auto it = bins.begin();
+    
+    for (advance(it, index); it != bins.end(); ++it)
     {
-        if (index > startIndex)
+        bool different = true;
+        for (int i = 0; i < *numFound && different; ++i)
         {
-            bool different = true;
-            for (int i = 0; i < *numFound; i++)
-            {
-                different = areDifferent(output[i], *it) && different;
-            }
-            if (different)
-            {
-                uint32_t newOutput[GOAL_NUM_WORDS];
-                copyBinaryArray(output, newOutput, *numFound);
-                uint32_t newNumFound = *numFound;
-                findDifferentWordBinaries(*it, newOutput, &newNumFound, index);
-                if (newNumFound > *numFound) *numFound = newNumFound;
-                copyBinaryArray(newOutput, output, newNumFound);
-            }
-            if (*numFound == GOAL_NUM_WORDS) return;
+            different = areDifferent(output[i], *it) && different;
         }
+        if (different)
+        {
+            uint32_t newOutput[GOAL_NUM_WORDS] = { 0,0,0,0,0 };
+            copyBinaryArray(output, newOutput, *numFound);
+            uint32_t newNumFound = *numFound;
+            findDifferentWordBinaries(*it, newOutput, &newNumFound, index);
+            if (*numFound == GOAL_NUM_WORDS)
+            {
+                *numFound = newNumFound;
+                copyBinaryArray(newOutput, output, newNumFound);
+                return;
+            }
             index++;
+        }
+        
     }
+
 }
 
 void search()
 {
-    for (auto it = bins.begin(); it != bins.end(); it++)
+    for (auto it = bins.begin(); it != bins.end(); ++it)
     {
+        cout << "Searching...";
         uint32_t output[GOAL_NUM_WORDS];
         uint32_t numFound = 0;
         findDifferentWordBinaries(*it, output, &numFound, 0);
         cout << numFound << " found for " << *it << endl;
+        outputWordsForBinaries(output, numFound);
         if (numFound == GOAL_NUM_WORDS) break;
     }
 
@@ -72,7 +102,7 @@ void search()
 
 bool binaryTaken(uint32_t bin)
 {
-    for (auto it = bins.begin();it != bins.end();it++)
+    for (auto it = bins.begin();it != bins.end();++it)
     {
         if (bin == *it) return true;
     }
@@ -99,7 +129,7 @@ uint32_t getLetterIndex(char letter)
 uint32_t binaryRep(string* s)
 {
     uint32_t rep = 0;
-    for (auto it = s->begin(); it != s->end(); it++)
+    for (auto it = s->begin(); it != s->end(); ++it)
     {
         rep |= 1UL << getLetterIndex(*it);
     }
@@ -110,7 +140,7 @@ uint32_t binaryRep(string* s)
 bool onlyAtoZ(string* s)
 {
     
-    for (auto it = s->begin(); it != s->end(); it++)
+    for (auto it = s->begin(); it != s->end(); ++it)
     {
         int char_int = *it;
         if (char_int < MIN_CHAR_INT || char_int > MAX_CHAR_INT) return false;
@@ -121,7 +151,7 @@ bool onlyAtoZ(string* s)
 bool noRepeatingLetters(string* s)
 {
     string seenLetters = "";
-    for (auto it = s->begin(); it != s->end(); it++)
+    for (auto it = s->begin(); it != s->end(); ++it)
     {
         char letter = *it;
         if (seenLetters.find(letter) != string::npos)
@@ -135,14 +165,13 @@ bool noRepeatingLetters(string* s)
 
 void add(string myText)
 { 
+    cout << ".";
     // add to list and output only 5 letter words with no punctuation
     if (myText.length() == 5 && onlyAtoZ(&myText) && noRepeatingLetters(&myText))
     {
-        cout << myText << endl;
         uint32_t binRep = binaryRep(&myText);
         if (!binaryTaken(binRep))
         {
-            cout << binRep << endl;
             fiveLetters.push_back(myText);
             bins.push_back(binRep);
         }
@@ -171,9 +200,8 @@ int main()
     time_t start, end;
     ifstream MyFile("words.txt");
     string myText;
-
     time(&start);
-
+    cout << "Reading...";
     while (getline(MyFile, myText)) {
         toLower(&myText);
         try {
