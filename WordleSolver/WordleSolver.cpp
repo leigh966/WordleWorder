@@ -38,28 +38,34 @@ void outputWordsForBinaries(uint32_t* chosenBins, int length)
     }
     cout << endl;
 }
-
+const uint32_t ALL_WORDS_MUST_HAVE = 263195; // aeiouy - every word needs at least one
 const int GOAL_NUM_WORDS = 5;
-bool findDifferentWordBinaries(uint32_t thisWordBin, uint32_t output[5], uint32_t* numFound, int startIndex)
+bool findDifferentWordBinaries(uint32_t thisWordBin, uint32_t output[5], uint32_t* numFound, int startIndex, uint32_t filter = 0)
 {
+    filter |= thisWordBin;
     output[*numFound] = thisWordBin;
     (*numFound)++;
-    outputWordsForBinaries(output, *numFound);
+    
+    if (*numFound == GOAL_NUM_WORDS)
+    {
+        return false;
+    }
+
+    bool impossible = (filter & ALL_WORDS_MUST_HAVE) == filter; //If all of the necissary letters are already taken
+    if (impossible) return true;
+    //outputWordsForBinaries(output, *numFound); // debug
+    cout << "."; // speed
     int index = startIndex;
     auto it = bins.begin();
+
     
     for (advance(it, index); it != bins.end(); ++it)
-    {
-        bool different = true;
-        for (int i = 0; i < *numFound && different; ++i)
+    {      
+        if (areDifferent(filter, *it))
         {
-            different = areDifferent(output[i], *it) && different;
-        }
-        if (different)
-        {
-            bool bad = findDifferentWordBinaries(*it, output, numFound, index);
+            bool bad = findDifferentWordBinaries(*it, output, numFound, index, filter);
             if (bad) (*numFound)--;
-            if (*numFound == GOAL_NUM_WORDS)
+            else
             {
                 return false;
             }
@@ -71,17 +77,24 @@ bool findDifferentWordBinaries(uint32_t thisWordBin, uint32_t output[5], uint32_
     return true;
 }
 
+
+void searchWord(uint32_t wordBin)
+{
+    cout << "\nSearching...";
+    uint32_t output[GOAL_NUM_WORDS];
+    uint32_t numFound = 0;
+    findDifferentWordBinaries(wordBin, output, &numFound, 0);
+    if (numFound == GOAL_NUM_WORDS)
+    {
+        outputWordsForBinaries(output, numFound);
+    }
+}
+
 void search()
 {
     for (auto it = bins.begin(); it != bins.end(); ++it)
     {
-        cout << "Searching...";
-        uint32_t output[GOAL_NUM_WORDS];
-        uint32_t numFound = 0;
-        findDifferentWordBinaries(*it, output, &numFound, 0);
-        cout << numFound << " found for " << *it << endl;
-        outputWordsForBinaries(output, numFound);
-        if (numFound == GOAL_NUM_WORDS) break;
+        searchWord( *it);
     }
 
 }
@@ -121,6 +134,7 @@ uint32_t binaryRep(string* s)
 
     return rep;
 }
+
 
 bool onlyAtoZ(string* s)
 {
