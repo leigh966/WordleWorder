@@ -38,7 +38,6 @@ void outputWordsForBinaries(uint32_t* chosenBins, int length)
     }
     cout << endl;
 }
-const uint32_t ALL_WORDS_MUST_HAVE = 263195; // aeiouy - every word needs at least one
 const int GOAL_NUM_WORDS = 5;
 bool findDifferentWordBinaries(uint32_t thisWordBin, uint32_t output[5], uint32_t* numFound, int startIndex, uint32_t filter = 0)
 {
@@ -51,8 +50,6 @@ bool findDifferentWordBinaries(uint32_t thisWordBin, uint32_t output[5], uint32_
         return false;
     }
 
-    bool impossible = (filter & ALL_WORDS_MUST_HAVE) == filter; //If all of the necissary letters are already taken
-    if (impossible) return true;
     //outputWordsForBinaries(output, *numFound); // debug
     cout << "."; // speed
     int index = startIndex;
