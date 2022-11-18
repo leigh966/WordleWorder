@@ -8,7 +8,8 @@ const int MIN_CHAR_INT = 'a', MAX_CHAR_INT = 'z';
 
 list<string> fiveLetters;
 list<uint32_t> bins;
-
+const uint32_t MAX_FILTER = 1UL << 26;
+bool seenFilters[MAX_FILTER];
 
 
 bool areDifferent(uint32_t bin1, uint32_t bin2)
@@ -38,21 +39,37 @@ void outputWordsForBinaries(uint32_t* chosenBins, int length)
     }
     cout << endl;
 }
+
+
+
 const int GOAL_NUM_WORDS = 5;
-bool findDifferentWordBinaries(uint32_t thisWordBin, uint32_t output[5], uint32_t* numFound, int startIndex, uint32_t filter = 0)
+bool handleSeen(int depth, uint32_t* filter)
+{
+    
+    bool seen = seenFilters[*filter];
+    if (!seen) seenFilters[*filter] = true;
+    return seen;
+}
+
+
+bool findDifferentWordBinaries(uint32_t thisWordBin, uint32_t output[5], uint32_t* numFound, int startIndex = 0, uint32_t filter = 0)
 {
     filter |= thisWordBin;
     output[*numFound] = thisWordBin;
-    (*numFound)++;
-    
+    (*numFound)++;  
+
+   //outputWordsForBinaries(output, *numFound); // debug
+
     if (*numFound == GOAL_NUM_WORDS)
     {
         return false;
     }
 
-    //outputWordsForBinaries(output, *numFound); // debug
-    cout << "."; // speed
-    int index = startIndex;
+    if (handleSeen(*numFound, &filter)) 
+        return true;
+
+
+    int index = startIndex+1;
     auto it = bins.begin();
 
     
@@ -75,23 +92,25 @@ bool findDifferentWordBinaries(uint32_t thisWordBin, uint32_t output[5], uint32_
 }
 
 
-void searchWord(uint32_t wordBin)
+bool searchWord(uint32_t wordBin)
 {
     cout << "\nSearching...";
     uint32_t output[GOAL_NUM_WORDS];
     uint32_t numFound = 0;
-    findDifferentWordBinaries(wordBin, output, &numFound, 0);
-    if (numFound == GOAL_NUM_WORDS)
-    {
-        outputWordsForBinaries(output, numFound);
-    }
+    bool bad = findDifferentWordBinaries(wordBin, output, &numFound);
+    outputWordsForBinaries(output, numFound);
+    return bad;
 }
 
 void search()
 {
-    for (auto it = bins.begin(); it != bins.end(); ++it)
+    bool bad = true;
+    for (auto it = bins.begin(); it != bins.end() && bad; ++it)
     {
-        searchWord( *it);
+        bad = searchWord( *it);
+        for (int i = 2; i < 5; ++i)
+        {
+        }
     }
 
 }
