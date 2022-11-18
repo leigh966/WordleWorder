@@ -108,9 +108,6 @@ void search()
     for (auto it = bins.begin(); it != bins.end() && bad; ++it)
     {
         bad = searchWord( *it);
-        for (int i = 2; i < 5; ++i)
-        {
-        }
     }
 
 }
@@ -152,17 +149,6 @@ uint32_t binaryRep(string* s)
 }
 
 
-bool onlyAtoZ(string* s)
-{
-    
-    for (auto it = s->begin(); it != s->end(); ++it)
-    {
-        int char_int = *it;
-        if (char_int < MIN_CHAR_INT || char_int > MAX_CHAR_INT) return false;
-    }
-    return true;
-}
-
 bool noRepeatingLetters(string* s)
 {
     string seenLetters = "";
@@ -182,7 +168,7 @@ void add(string myText)
 { 
     cout << ".";
     // add to list and output only 5 letter words with no punctuation
-    if (myText.length() == 5 && onlyAtoZ(&myText) && noRepeatingLetters(&myText))
+    if (noRepeatingLetters(&myText))
     {
         uint32_t binRep = binaryRep(&myText);
         if (!binaryTaken(binRep))
