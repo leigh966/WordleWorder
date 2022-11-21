@@ -3,7 +3,6 @@
 
 #include "WordleSolver.hpp"
 
-
 using namespace std;
 using namespace std::chrono;
 
@@ -198,22 +197,24 @@ void outputRuntime(steady_clock::time_point start, steady_clock::time_point end)
 
 int main()
 {
-    
     ifstream MyFile("words.txt");
     string myText;
     auto start = high_resolution_clock::now();
-    cout << "Reading...";
+ 
+        cout << "Reading...";
+
     while (getline(MyFile, myText)) {
+
         toLower(&myText);
-        try {
-            add(myText);
-        }
-    
-    catch (string s)
-    {
-        cout << s << endl;
-        return -1;
-    }
+            try {
+                add(myText);
+            }
+
+            catch (string s)
+            {
+                cout << s << endl;
+                return -1;
+            }
     }
     
 
@@ -222,7 +223,7 @@ int main()
     auto stop = high_resolution_clock::now();
 
     outputRuntime(start, stop);
-    cin >> myText;
+    std::cin >> myText;
     return 0;
 }
 
