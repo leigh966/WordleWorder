@@ -3,7 +3,9 @@
 
 #include "WordleSolver.hpp"
 
+
 using namespace std;
+using namespace std::chrono;
 
 const int MIN_CHAR_INT = 'a', MAX_CHAR_INT = 'z';
 
@@ -107,6 +109,7 @@ void search()
 
 bool binaryTaken(uint32_t bin)
 {
+    
     for (int i = 0; i < bins.size(); ++i)
     {
         if (bins[i] == bin) return true;
@@ -133,6 +136,7 @@ uint32_t getLetterIndex(char letter)
 
 uint32_t binaryRep(string* s)
 {
+    
     uint32_t rep = 0;
     for (auto it = s->begin(); it != s->end(); ++it)
     {
@@ -140,6 +144,7 @@ uint32_t binaryRep(string* s)
     }
 
     return rep;
+    
 }
 
 
@@ -179,23 +184,24 @@ void toLower(string* s)
         [](unsigned char c) { return std::tolower(c); });
 }
 
-void outputRuntime(time_t start, time_t end)
+void outputRuntime(steady_clock::time_point start, steady_clock::time_point end)
 {
     // Calculating total time taken by the program.
-    double time_taken = double(end - start);
+    auto duration = duration_cast<milliseconds>(end - start);
+    
     cout << "Time taken by program is : " << fixed
-        << time_taken << setprecision(5);
-    cout << " sec " << endl;
+        << duration.count() << setprecision(5);
+    cout << " milliseconds " << endl;
 }
 
 
 
 int main()
 {
-    time_t start, end;
+    
     ifstream MyFile("words.txt");
     string myText;
-    time(&start);
+    auto start = high_resolution_clock::now();
     cout << "Reading...";
     while (getline(MyFile, myText)) {
         toLower(&myText);
@@ -213,9 +219,9 @@ int main()
 
     search();
 
-    time(&end);
+    auto stop = high_resolution_clock::now();
 
-    outputRuntime(start, end);
+    outputRuntime(start, stop);
     cin >> myText;
     return 0;
 }

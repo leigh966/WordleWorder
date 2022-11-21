@@ -8,5 +8,6 @@
 #include <algorithm>
 #include <cctype>
 #include <format>
+#include <chrono>
 
 bool areDifferent(uint32_t bin1, uint32_t bin2);
