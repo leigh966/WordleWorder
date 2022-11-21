@@ -66,15 +66,12 @@ bool findDifferentWordBinaries(uint32_t thisWordBin, uint32_t output[5], uint32_
     if (handleSeen(*numFound, &filter)) 
         return true;
 
-    int index = startIndex+1;
-    auto it = bins.begin();
-
     
-    for (advance(it, index); it != bins.end(); ++it)
+    for (int index = startIndex+1; index < bins.size(); ++index)
     {      
-        if (areDifferent(filter, *it))
+        if (areDifferent(filter, bins[index]))
         {
-            bool bad = findDifferentWordBinaries(*it, output, numFound, index, filter);
+            bool bad = findDifferentWordBinaries(bins[index], output, numFound, index, filter);
             if (bad) (*numFound)--;
             else
             {
@@ -82,7 +79,6 @@ bool findDifferentWordBinaries(uint32_t thisWordBin, uint32_t output[5], uint32_
             }
             
         }
-        index++;
         
     }
     return true;
