@@ -2,12 +2,13 @@
 //
 
 #include "WordleSolver.hpp"
+
 using namespace std;
 
 const int MIN_CHAR_INT = 'a', MAX_CHAR_INT = 'z';
 
-list<string> fiveLetters;
-list<uint32_t> bins;
+vector<string> fiveLetters;
+vector<uint32_t> bins;
 const uint32_t MAX_FILTER = 1UL << 26;
 bool seenFilters[MAX_FILTER];
 
@@ -61,13 +62,9 @@ bool findDifferentWordBinaries(uint32_t thisWordBin, uint32_t output[5], uint32_
    //outputWordsForBinaries(output, *numFound); // debug
 
     if (*numFound == GOAL_NUM_WORDS)
-    {
         return false;
-    }
-
     if (handleSeen(*numFound, &filter)) 
         return true;
-
 
     int index = startIndex+1;
     auto it = bins.begin();
@@ -105,9 +102,9 @@ bool searchWord(uint32_t wordBin)
 void search()
 {
     bool bad = true;
-    for (auto it = bins.begin(); it != bins.end() && bad; ++it)
+    for(int index = 0; index < bins.size() && bad; ++index)
     {
-        bad = searchWord( *it);
+        bad = searchWord(bins[index]);
     }
 
 }
