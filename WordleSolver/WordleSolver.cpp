@@ -107,11 +107,12 @@ void search()
 
 bool binaryTaken(uint32_t bin)
 {
-    for (auto it = bins.begin();it != bins.end();++it)
+    for (int i = 0; i < bins.size(); ++i)
     {
-        if (bin == *it) return true;
+        if (bins[i] == bin) return true;
     }
     return false;
+    
 }
 
 uint32_t getLetterIndex(char letter)
@@ -215,6 +216,7 @@ int main()
     time(&end);
 
     outputRuntime(start, end);
+    cin >> myText;
     return 0;
 }
 
